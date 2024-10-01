@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
         if (!passwordCheck) {
             return res.status(400).send('패스워드가 틀렸습니다.');
         }
-        
+        req.session.loggedIn = true;
         res.send('로그인에 성공하셨습니다');
         //리다이렉션 홈으로
 
