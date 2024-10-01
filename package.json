@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "express": "^4.21.0",
     "express-session": "^1.18.0",
@@ -9,7 +10,7 @@
     "nodemon": "^3.1.7"
   },
   "scripts": {
-    "start": "node ./src/bin/www.js", 
-    "dev": "nodemon ./src/bin/www.js" 
+    "start": "node ./src/bin/www.js",
+    "dev": "nodemon ./src/bin/www.js"
   }
 }

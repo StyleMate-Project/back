@@ -3,9 +3,10 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../lib/db.js");
+const bcrypt = require('bcrypt');
 
 //회원가입
-router.post('/register', async (req, res) => {
+router.post('/', async (req, res) => {
     const { username, email, id, password, checkPassword } = req.body;
 
     // 비밀번호 확인
@@ -15,19 +16,23 @@ router.post('/register', async (req, res) => {
 
     try {
         // 아이디 중복 체크
-        const [idResult] = await db.promise().query("SELECT * FROM login WHERE id = ?", [username]);
+        let sameIdCheckQuery = "SELECT * FROM login WHERE id = ?"
+        const [idResult] = await db.promise().query(sameIdCheckQuery, [id]);
         if (idResult.length > 0) {
             return res.status(400).send('이미 존재하는 id입니다');
         }
 
         // 이메일 중복 체크
-        const [emailResult] = await db.promise().query("SELECT * FROM login WHERE email = ?", [email]);
+        let sameEmailCheckQuery = "SELECT * FROM login WHERE email = ?";
+        const [emailResult] = await db.promise().query(sameEmailCheckQuery, [email]);
         if (emailResult.length > 0) {
             return res.status(400).send('이미 존재하는 email입니다');
         }
 
-        //마지막 회원가입 체크
-        await db.promise().query("INSERT INTO login (username, email, id, password) VALUES (?, ?, ?, ?)", [username, email, id, password]);
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        let joinCheckQuery = "INSERT INTO login (username, email, id, password) VALUES (?, ?, ?, ?)";
+        await db.promise().query(joinCheckQuery, [username, email, id, hashedPassword]);
 
         // 회원가입 성공 응답
         res.send('회원가입 성공');
