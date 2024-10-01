@@ -8,6 +8,12 @@ const bcrypt = require('bcrypt');//비밀번호 해싱
 router.post('/', async (req, res) => {
     const { id, password } = req.body;
 
+    if (!id) {
+        res.status(400).send('아이디를 작성하지 않았습니다.');
+    } else if (!password) {
+        res.status(400).send('비밀번호를 작성하지 않았습니다.');
+    }
+
     try {
         const [idCheck] = await db.promise().query("SELECT * FROM login WHERE id = ?" , [id]);
 

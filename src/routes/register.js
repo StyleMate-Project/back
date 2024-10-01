@@ -9,6 +9,22 @@ const bcrypt = require('bcrypt');
 router.post('/', async (req, res) => {
     const { username, email, id, password, checkPassword } = req.body;
 
+    if (!username){
+        return res.status(400).send('이름을 작성하지 않았습니다.');
+    }
+    else if (!email){
+        return res.status(400).send('이메일을 작성하지 않았습니다.');
+    }
+    else if (!id){
+        return res.status(400).send('아이디를 작성하지 않았습니다.');
+    }
+    else if (!password){
+        return res.status(400).send('비밀번호를 작성하지 않았습니다.');
+    }
+    else if (!checkPassword) {
+        return res.status(400).send('확인 비밀번호를 작성하지 않았습니다');
+    }
+
     // 비밀번호 확인
     if (password !== checkPassword) {
         return res.status(400).send('비밀번호가 맞지 않습니다.');
